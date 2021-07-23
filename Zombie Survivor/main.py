@@ -102,7 +102,7 @@ class ZombieWalk(games.Animation):
                                          x = x,
                                          y = y,
                                          angle = 90,
-                                         dy = 3,
+                                         dy = random.randint(1,3),
                                          n_repeats = 0,
                                          repeat_interval = 1)
 
@@ -116,12 +116,12 @@ class ZombieDeath(games.Animation):
               "zombie/death01/death01_0013.png", "zombie/death01/death01_0014.png", "zombie/death01/death01_0015.png", "zombie/death01/death01_0016.png"]
 
     def __init__(self, x, y):
-        super(ZombieWalk, self).__init__(images = ZombieDeath.images,
+        super(ZombieDeath, self).__init__(images = ZombieDeath.images,
                                          x = x,
                                          y = y,
                                          angle = 90,
                                          n_repeats = 1,
-                                         repeat_interval = 1)
+                                         repeat_interval = 3)
 
 
 def main():
