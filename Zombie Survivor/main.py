@@ -10,6 +10,21 @@ class Player(games.Sprite):
     sound_empty = games.load_sound("sounds/empty_gun.wav")
     NEXT_SHOT = 25
 
+    kill_text = games.Text(value = "Kills",
+                           size = 50,
+                           color = color.white,
+                           x = games.screen.width - 60,
+                           y = 40,
+                           is_collideable = False)
+
+    kill_count = games.Text(value = 0,
+                            size = 50,
+                            color = color.white,
+                            x = games.screen.width - 60,
+                            y = 80,
+                            is_collideable = False)
+
+
     def __init__(self):
         super(Player, self).__init__(image = Player.image,
                                      x = games.screen.width/2,
@@ -33,6 +48,9 @@ class Player(games.Sprite):
 
         games.screen.add(self.ammo_text)
         games.screen.add(self.ammo_count)
+
+        games.screen.add(Player.kill_text)
+        games.screen.add(Player.kill_count)
 
 
     def update(self):
@@ -87,6 +105,7 @@ class Bullet(games.Sprite):
             blood = Blood(sprite.x, sprite.y)
             games.screen.add(death)
             games.screen.add(blood)
+            Player.kill_count.value += 1
 
         if self.top > games.screen.height:
             self.destroy()
@@ -158,6 +177,8 @@ def main():
     p = Player()
     games.screen.add(p)
 
+    z = ZombieWalk()
+    games.screen.add(z)
 
     games.screen.mainloop()
 
