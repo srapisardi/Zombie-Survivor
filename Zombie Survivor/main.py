@@ -84,7 +84,9 @@ class Bullet(games.Sprite):
             sprite.destroy()
             self.destroy()
             death = ZombieDeath(sprite.x, sprite.y)
+            blood = Blood(sprite.x, sprite.y)
             games.screen.add(death)
+            games.screen.add(blood)
 
         if self.top > games.screen.height:
             self.destroy()
@@ -106,14 +108,12 @@ class ZombieWalk(games.Animation):
                                          x = random.randint(30,770),
                                          y = 0,
                                          angle = 90,
-                                         dy = random.randint(1,3),
+                                         dy = 1,
                                          n_repeats = 0,
                                          repeat_interval = 1)
 
 
         ZombieWalk.sound.play()
-
-
 
 
 
@@ -135,6 +135,18 @@ class ZombieDeath(games.Animation):
 
         ZombieDeath.sound.play()
 
+class Blood(games.Animation):
+    images =["blood/bloodsplats_0032.png", "blood/bloodsplats_0033.png", "blood/bloodsplats_0034.png", "blood/bloodsplats_0035.png", "blood/bloodsplats_0036.png",
+             "blood/bloodsplats_0037.png", "blood/bloodsplats_0038.png", "blood/bloodsplats_0039.png", "blood/bloodsplats_0040.png", "blood/bloodsplats_0041.png",
+             "blood/bloodsplats_0042.png", "blood/bloodsplats_0043.png", "blood/bloodsplats_0044.png", "blood/bloodsplats_0045.png", "blood/bloodsplats_0046.png"]
+
+    def __init__(self, x, y):
+        super(Blood, self).__init__(images = Blood.images,
+                                    x = x,
+                                    y = y,
+                                    n_repeats = 1,
+                                    repeat_interval = 3)
+
 def main():
 
     bg = games.load_image("background.jpg")
@@ -142,10 +154,6 @@ def main():
 
     games.music.load("sounds/music.wav")
     games.music.play(-1)
-
-
-    z = ZombieWalk()
-    games.screen.add(z)
 
     p = Player()
     games.screen.add(p)
