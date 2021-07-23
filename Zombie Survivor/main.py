@@ -86,6 +86,9 @@ class Bullet(games.Sprite):
             death = ZombieDeath(sprite.x, sprite.y)
             games.screen.add(death)
 
+        if self.top > games.screen.height:
+            self.destroy()
+
 
 
 class ZombieWalk(games.Animation):
@@ -96,15 +99,20 @@ class ZombieWalk(games.Animation):
               "zombie/walk/walk0021.png", "zombie/walk/walk0022.png", "zombie/walk/walk0023.png", "zombie/walk/walk0024.png", "zombie/walk/walk0025.png",
               "zombie/walk/walk0026.png", "zombie/walk/walk0027.png", "zombie/walk/walk0028.png", "zombie/walk/walk0029.png", "zombie/walk/walk0030.png", "zombie/walk/walk0031.png"]
 
+    sound = games.load_sound("sounds/zombie_one.wav")
 
-    def __init__(self, x, y):
+    def __init__(self):
         super(ZombieWalk, self).__init__(images = ZombieWalk.images,
-                                         x = x,
-                                         y = y,
+                                         x = random.randint(30,770),
+                                         y = 0,
                                          angle = 90,
                                          dy = random.randint(1,3),
                                          n_repeats = 0,
                                          repeat_interval = 1)
+
+
+        ZombieWalk.sound.play()
+
 
 
 
@@ -115,6 +123,8 @@ class ZombieDeath(games.Animation):
               "zombie/death01/death01_0009.png", "zombie/death01/death01_0010.png", "zombie/death01/death01_0011.png", "zombie/death01/death01_0012.png",
               "zombie/death01/death01_0013.png", "zombie/death01/death01_0014.png", "zombie/death01/death01_0015.png", "zombie/death01/death01_0016.png"]
 
+    sound = games.load_sound("sounds/zombie_death.wav")
+
     def __init__(self, x, y):
         super(ZombieDeath, self).__init__(images = ZombieDeath.images,
                                          x = x,
@@ -123,8 +133,10 @@ class ZombieDeath(games.Animation):
                                          n_repeats = 1,
                                          repeat_interval = 3)
 
+        ZombieDeath.sound.play()
 
 def main():
+
     bg = games.load_image("background.jpg")
     games.screen.background = bg
 
@@ -132,11 +144,12 @@ def main():
     games.music.play(-1)
 
 
+    z = ZombieWalk()
+    games.screen.add(z)
+
     p = Player()
     games.screen.add(p)
 
-    z = ZombieWalk(400,0)
-    games.screen.add(z)
 
     games.screen.mainloop()
 
