@@ -87,6 +87,7 @@ class Player(games.Sprite):
         if self.right > games.screen.width:
             self.right = games.screen.width
 
+
 class Bullet(games.Sprite):
     image = games.load_image("bullet.png")
     LIFE = 40
@@ -134,6 +135,12 @@ class ZombieWalk(games.Animation):
 
         ZombieWalk.sound.play()
 
+    def update(self):
+        for sprite in self.overlapping_sprites:
+            self.destroy()
+            attack = ZombieAttack(self.x, self.y)
+            games.screen.add(attack)
+
 
 
 class ZombieDeath(games.Animation):
@@ -153,6 +160,21 @@ class ZombieDeath(games.Animation):
                                          repeat_interval = 3)
 
         ZombieDeath.sound.play()
+
+class ZombieAttack(games.Animation):
+    images = ["zombie/attack01/attack01_0001.png","zombie/attack01/attack01_0002.png","zombie/attack01/attack01_0003.png","zombie/attack01/attack01_0004.png",
+              "zombie/attack01/attack01_0005.png", "zombie/attack01/attack01_0006.png", "zombie/attack01/attack01_0007.png", "zombie/attack01/attack01_0008.png",
+              "zombie/attack01/attack01_0009.png", "zombie/attack01/attack01_0010.png", "zombie/attack01/attack01_0011.png", "zombie/attack01/attack01_0012.png",
+              "zombie/attack01/attack01_0013.png", "zombie/attack01/attack01_0014.png", "zombie/attack01/attack01_0015.png", "zombie/attack01/attack01_0016.png",
+              "zombie/attack01/attack01_0017.png", "zombie/attack01/attack01_0018.png", "zombie/attack01/attack01_0019.png"]
+
+    def __init__(self, x, y):
+        super(ZombieAttack, self).__init__(images = ZombieAttack.images,
+                                    x = x,
+                                    y = y,
+                                    angle = 90,
+                                    n_repeats = 0,
+                                    repeat_interval = 3)
 
 class Blood(games.Animation):
     images =["blood/bloodsplats_0032.png", "blood/bloodsplats_0033.png", "blood/bloodsplats_0034.png", "blood/bloodsplats_0035.png", "blood/bloodsplats_0036.png",
