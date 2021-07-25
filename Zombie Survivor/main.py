@@ -154,7 +154,8 @@ class ZombieDeath(games.Animation):
                                          y = y,
                                          angle = 90,
                                          n_repeats = 1,
-                                         repeat_interval = 3)
+                                         repeat_interval = 3,
+                                         is_collideable = False)
 
         ZombieDeath.sound.play()
         ZombieAttack.sound.stop()
@@ -179,7 +180,7 @@ class ZombieAttack(games.Animation):
         ZombieAttack.sound.play(-1)
 
 class Respawn(games.Sprite):
-    image = games.load_image("spawn.png")
+    image = games.load_image("spawn_test.png")
 
     def __init__(self):
         super(Respawn, self).__init__(image = Respawn.image,
@@ -194,6 +195,8 @@ class Respawn(games.Sprite):
     def update(self):
         if self.left < 0 or self.right > games.screen.width:
             self.dx -= self.dx
+        elif random.randrange(self.next_zombie) == 0:
+           self.dx = -self.dx
 
         self.spawn()
 
@@ -217,7 +220,8 @@ class Blood(games.Animation):
                                     x = x,
                                     y = y,
                                     n_repeats = 1,
-                                    repeat_interval = 3)
+                                    repeat_interval = 3,
+                                    is_collideable = False)
 
 
 
