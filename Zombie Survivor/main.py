@@ -123,16 +123,14 @@ class ZombieWalk(games.Animation):
 
     sound = games.load_sound("sounds/zombie_one.wav")
 
-    def __init__(self):
+    def __init__(self, x, y):
         super(ZombieWalk, self).__init__(images = ZombieWalk.images,
-                                         x = random.randint(30,770),
-                                         y = 0,
+                                         x = x,
+                                         y = y,
                                          angle = 90,
                                          dy = 1,
                                          n_repeats = 0,
                                          repeat_interval = 1)
-
-
         ZombieWalk.sound.play()
 
     def update(self):
@@ -140,7 +138,6 @@ class ZombieWalk(games.Animation):
             self.destroy()
             attack = ZombieAttack(self.x, self.y)
             games.screen.add(attack)
-
 
 
 class ZombieDeath(games.Animation):
@@ -160,6 +157,7 @@ class ZombieDeath(games.Animation):
                                          repeat_interval = 3)
 
         ZombieDeath.sound.play()
+        ZombieAttack.sound.stop()
 
 class ZombieAttack(games.Animation):
     images = ["zombie/attack01/attack01_0001.png","zombie/attack01/attack01_0002.png","zombie/attack01/attack01_0003.png","zombie/attack01/attack01_0004.png",
@@ -168,6 +166,8 @@ class ZombieAttack(games.Animation):
               "zombie/attack01/attack01_0013.png", "zombie/attack01/attack01_0014.png", "zombie/attack01/attack01_0015.png", "zombie/attack01/attack01_0016.png",
               "zombie/attack01/attack01_0017.png", "zombie/attack01/attack01_0018.png", "zombie/attack01/attack01_0019.png"]
 
+    sound = games.load_sound("sounds/zombie_attack.wav")
+
     def __init__(self, x, y):
         super(ZombieAttack, self).__init__(images = ZombieAttack.images,
                                     x = x,
@@ -175,6 +175,37 @@ class ZombieAttack(games.Animation):
                                     angle = 90,
                                     n_repeats = 0,
                                     repeat_interval = 3)
+
+        ZombieAttack.sound.play(-1)
+
+class Respawn(games.Sprite):
+    image = games.load_image("spawn.png")
+
+    def __init__(self):
+        super(Respawn, self).__init__(image = Respawn.image,
+                                      x = games.screen.width/2,
+                                      y = 0,
+                                      dx = 1,
+                                      is_collideable = False)
+
+        self.next_zombie = 200
+        self.respawn = 0
+
+    def update(self):
+        if self.left < 0 or self.right > games.screen.width:
+            self.dx -= self.dx
+
+        self.spawn()
+
+    def spawn(self):
+        if self.respawn > 0:
+            self.respawn -= 1
+        else:
+            new_zombie = ZombieWalk(x = self.x, y = self.y)
+            games.screen.add(new_zombie)
+            self.respawn = self.next_zombie
+
+
 
 class Blood(games.Animation):
     images =["blood/bloodsplats_0032.png", "blood/bloodsplats_0033.png", "blood/bloodsplats_0034.png", "blood/bloodsplats_0035.png", "blood/bloodsplats_0036.png",
@@ -188,6 +219,8 @@ class Blood(games.Animation):
                                     n_repeats = 1,
                                     repeat_interval = 3)
 
+
+
 def main():
 
     bg = games.load_image("background.jpg")
@@ -196,11 +229,11 @@ def main():
     games.music.load("sounds/music.wav")
     games.music.play(-1)
 
+    z = Respawn()
+    games.screen.add(z)
+
     p = Player()
     games.screen.add(p)
-
-    z = ZombieWalk()
-    games.screen.add(z)
 
     games.screen.mainloop()
 
