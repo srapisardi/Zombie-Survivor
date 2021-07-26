@@ -99,15 +99,12 @@ class Bullet(games.Sprite):
                                      dy = -10)
 
     def update(self):
+        #Bullet hitting Zombie
         for sprite in self.overlapping_sprites:
-            sprite.destroy()
             self.destroy()
-            death = ZombieDeath(sprite.x, sprite.y)
-            blood = Blood(sprite.x, sprite.y)
-            games.screen.add(death)
-            games.screen.add(blood)
+            sprite.dead()
             Player.kill_count.value += 1
-
+        #Bullet disappears offscreen
         if self.top > games.screen.height:
             self.destroy()
 
@@ -128,7 +125,7 @@ class ZombieWalk(games.Animation):
                                          x = x,
                                          y = y,
                                          angle = 90,
-                                         dy = 1,
+                                         dy = random.randint(1,5),
                                          n_repeats = 0,
                                          repeat_interval = 1)
         ZombieWalk.sound.play()
@@ -138,6 +135,13 @@ class ZombieWalk(games.Animation):
             self.destroy()
             attack = ZombieAttack(self.x, self.y)
             games.screen.add(attack)
+
+    def dead(self):
+        self.destroy()
+        death = ZombieDeath(self.x, self.y)
+        blood = Blood(self.x, self.y)
+        games.screen.add(death)
+        games.screen.add(blood)
 
 
 class ZombieDeath(games.Animation):
@@ -179,8 +183,15 @@ class ZombieAttack(games.Animation):
 
         ZombieAttack.sound.play(-1)
 
+    def dead(self):
+        self.destroy()
+        death = ZombieDeath(self.x, self.y)
+        blood = Blood(self.x, self.y)
+        games.screen.add(death)
+        games.screen.add(blood)
+
 class Respawn(games.Sprite):
-    image = games.load_image("spawn_test.png")
+    image = games.load_image("spawn.png")
 
     def __init__(self):
         super(Respawn, self).__init__(image = Respawn.image,
@@ -189,12 +200,12 @@ class Respawn(games.Sprite):
                                       dx = 1,
                                       is_collideable = False)
 
-        self.next_zombie = 200
+        self.next_zombie = random.randint(50,200)
         self.respawn = 0
 
     def update(self):
         if self.left < 0 or self.right > games.screen.width:
-            self.dx -= self.dx
+            self.dx = -self.dx
         elif random.randrange(self.next_zombie) == 0:
            self.dx = -self.dx
 
@@ -206,7 +217,7 @@ class Respawn(games.Sprite):
         else:
             new_zombie = ZombieWalk(x = self.x, y = self.y)
             games.screen.add(new_zombie)
-            self.respawn = self.next_zombie
+            self.respawn = random.randint(50,200)
 
 
 
@@ -233,8 +244,8 @@ def main():
     games.music.load("sounds/music.wav")
     games.music.play(-1)
 
-    z = Respawn()
-    games.screen.add(z)
+    r1 = Respawn()
+    games.screen.add(r1)
 
     p = Player()
     games.screen.add(p)
