@@ -242,6 +242,19 @@ class Blood(games.Animation):
                                     repeat_interval = 3,
                                     is_collideable = False)
 
+class Barricade(games.Sprite):
+    image = games.load_image("wall.jpg")
+
+    def __init__(self, x, y):
+        super(Barricade,self).__init__(image = Barricade.image,
+                                       x = x,
+                                       y = y)
+
+
+    def update(self):
+        for sprites in self.overlapping_sprites:
+            pass
+
 
 
 def main():
@@ -254,12 +267,18 @@ def main():
 
     r_left = Respawn(50,0)
     games.screen.add(r_left)
+    b_left = Barricade(50, games.screen.height - 100)
+    games.screen.add(b_left)
 
     r_middle = Respawn(games.screen.width/2, 0)
     games.screen.add(r_middle)
+    b_middle = Barricade(games.screen.width/2, games.screen.height - 100)
+    games.screen.add(b_middle)
 
     r_right = Respawn(games.screen.width - 50, 0)
     games.screen.add(r_right)
+    b_right = Barricade(games.screen.width - 50, games.screen.height - 100)
+    games.screen.add(b_right)
 
     p = Player()
     games.screen.add(p)
